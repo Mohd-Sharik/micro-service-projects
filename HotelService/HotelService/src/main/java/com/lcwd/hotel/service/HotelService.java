@@ -1,6 +1,7 @@
 package com.lcwd.hotel.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,13 +98,15 @@ public class HotelService {
 	
 	
 	// get Single Hotel By id
+	
 	public HotelModels findById(Long id)
 	{
 		HotelModels response = new HotelModels();
 		try
 		{
 			// here we remove Host and port instead use of Service name
-			//ArrayList<RatingModel> gethotelratings =  restTemplate.getForObject("http://RATING-SERVICE/rating/findByHotelid/"+id, ArrayList.class);
+			RatingModel[] gethotelratings =  restTemplate.getForObject("http://RATING-SERVICE/rating/findByHotelid/"+id, RatingModel[].class);
+			List<RatingModel> listRating = Arrays.stream(gethotelratings).toList();
 			HotelEntity entity = hotelrepository.findById(id).get();
 			
 			response.setId(entity.getId() != null ? entity.getId() : null);
@@ -111,7 +114,7 @@ public class HotelService {
 			response.setLocation(entity.getLocation() != null ? entity.getLocation() : null);
 			response.setAbout(entity.getAbout() != null ? entity.getAbout() : null);
 			
-			//response.setRatings(gethotelratings);
+			response.setRatings(listRating);
 			
 		}
 		catch (Exception e) {
@@ -121,5 +124,9 @@ public class HotelService {
 		
 		return response;
 	}
+	
+	
+	
+			
 
 }

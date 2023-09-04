@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.lcwd.user.controller.UserController;
 import com.lcwd.user.entities.UserEntity;
 import com.lcwd.user.externalServices.HotelService;
 import com.lcwd.user.models.HotelModel;
@@ -20,11 +23,12 @@ import com.lcwd.user.models.UserModel;
 import com.lcwd.user.persistance.UserPersistancce;
 
 import ch.qos.logback.classic.Logger;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class UserService {
 	
-	
+	org.jboss.logging.Logger logger = LoggerFactory.logger(UserController.class);
 	
 	@Autowired
 	private UserPersistancce userPersistance;
@@ -90,8 +94,7 @@ public class UserService {
 	{
 		UserModel response = new UserModel();
 		   
-		try
-		{
+	
 			UserEntity entity = userPersistance.findById(id).get();
 			// here call another microservices to get result
 			// here we remove Host and port instead use of Service name
@@ -105,13 +108,13 @@ public class UserService {
 //			listHotel.add(hotel);
 //		}
 //		
-		List<RatingModel> ratingList = ratList.stream()
-			    .map(input -> {
-			        HotelModel hotel = hotelService.getHotel(input.getHotelId());
-			        input.setHotel(hotel);
-			        return input;
-			    })
-			    .collect(Collectors.toList());
+//		List<RatingModel> ratingList = ratList.stream()
+//			    .map(input -> {
+//			        HotelModel hotel = hotelService.getHotel(input.getHotelId());
+//			        input.setHotel(hotel);
+//			        return input;
+//			    })
+//			    .collect(Collectors.toList());
 
 		
 			response.setId(entity.getId()!= null ? entity.getId() : null);
@@ -119,17 +122,13 @@ public class UserService {
 			response.setAbout(entity.getAbout() != null ? entity.getAbout() : null);
 			response.setName(entity.getName() != null ? entity.getName() : null);
 			response.setEmail(entity.getEmail() != null ? entity.getEmail() : null);
-			response.setRatings(ratingList);
+			response.setRatings(ratList);
 			//response.setHotels(ratingList);
 			
-			
-		}
-		catch (Exception e) {
-			System.out.println("exception occure inside findById service method : "+e);
-		}
-		
+	
 		return response;
 	}
+	
 	
 	// getAll records from database
 	public List<UserModel> getAll()

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lcwd.hotel.models.HotelModels;
 import com.lcwd.hotel.service.HotelService;
 
+
 @RestController
 @RequestMapping(value = "/hotel")
 public class HotelController {
@@ -75,5 +76,6 @@ public class HotelController {
 		
 		return ResponseEntity.status(HttpStatus.FOUND).body(result);
 	}
-
+	
+	
 }

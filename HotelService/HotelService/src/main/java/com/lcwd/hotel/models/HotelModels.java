@@ -1,6 +1,7 @@
 package com.lcwd.hotel.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HotelModels {
 	
@@ -10,7 +11,7 @@ public class HotelModels {
 	private String location;
 	private String about;
 	
-	//private ArrayList<RatingModel> ratings;
+	private List<RatingModel> ratings;
 	
 	
 	public long getId() {
@@ -37,13 +38,13 @@ public class HotelModels {
 	public void setAbout(String about) {
 		this.about = about;
 	}
-//	public ArrayList<RatingModel> getRatings() {
-//		return ratings;
-//	}
-//	public void setRatings(ArrayList<RatingModel> ratings) {
-//		this.ratings = ratings;
-//	}
-//	
+	public List<RatingModel> getRatings() {
+		return ratings;
+	}
+	public void setRatings(List<RatingModel> ratings) {
+		this.ratings = ratings;
+	}
+	
 	
 	
 	
